@@ -1,6 +1,7 @@
 [build-system]
 requires = [
     "setuptools>=42",
+    "bravado_client",
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
