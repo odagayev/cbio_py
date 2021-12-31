@@ -24,3 +24,8 @@ def getALLClinicalAttributes():
 def getClinicalAttributesByStudyId(id):
     clinicalAttributes = cbioportal.Clinical_Attributes.getAllClinicalAttributesInStudyUsingGET(studyId=id).result()
     return clinicalAttributes
+
+def getClinicalAttributeInStudy(studyId, clinicalAttributeId):
+    clinicalAttributes = cbioportal.Clinical_Attributes.getClinicalAttributeInStudyUsingGET(clinicalAttributeId=clinicalAttributeId,studyId=studyId).result()
+    return clinicalAttributes
+
