@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+src/cbio_py/__init__.py
+src/cbio_py/cbio_mod.py
+src/cbio_py.egg-info/PKG-INFO
+src/cbio_py.egg-info/SOURCES.txt
+src/cbio_py.egg-info/dependency_links.txt
+src/cbio_py.egg-info/requires.txt
+src/cbio_py.egg-info/top_level.txt
