@@ -1,11 +1,11 @@
 Metadata-Version: 2.1
 Name: cbio-py
-Version: 0.1.1
+Version: 0.1.2
 Summary: This is a python client for the cBioPortal API
 Home-page: https://github.com/odagayev/cancer_module_cbio
 Author: Sasha Dagayev
 License: UNKNOWN
-Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Project-URL: Bug Tracker, https://github.com/odagayev/cancer_module_cbio/issues
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
