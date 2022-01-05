@@ -5,6 +5,7 @@ This is a python package for accessing the [Cancer Genomics Portal](https://www.
 ## Quickstart
 
 The module is available as a [pip package](https://pypi.org/project/cbio_py/) and can be installed with:
+
 `pip install cbio_py`.
 
 Then run the following command to get the list of available studies:
