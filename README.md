@@ -17,7 +17,7 @@ cb.get_studies()
 
 The data retrieval functions are broken up over several key data types. The following sections provide a list of the available functions for each data type.
 
-A quick note about the return data types - this API, by default, return the data in a list of dictionaries.This is because the data that is natively return by cbio is in a list of custom classes such as `Study`, `Case`, `Sample`, etc. This is a bit cumbersome to work with and is not the most efficient way to work with the data if you're using it for data analysis. 
+A quick note about the return data types - this API, by default, return the data in a list of dictionaries. This is because the data that is natively return by the cbio curl API is in a list of custom classes such as `Study`, `Case`, `Sample`, etc. This is a bit cumbersome to work with and may not be the most efficient way to work with the data if you're using it for data analysis. 
 
 If you would like for the data to be returned in the native format - all of the functions should support a `return_type` parameter that can be set to `native` to return the data in the native format.
 
