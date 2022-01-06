@@ -38,6 +38,7 @@ If you would like for the data to be returned in the native format - all of the 
 `getCancerByID(cancerTypeId, return_type = 'dict')` - this returns a list of cancer types with the given `cancertypeid`.
 
 ### Clinical Attributes
+
 `getAllClinicalAttributes(return_type = 'dict')` - this returns a list of all available clinical attributes.
 
 `getClinicalAttributesByStudyId(studyId, return_type = 'dict')` - this returns a list of clinical attributes for the given study id.
@@ -46,6 +47,7 @@ If you would like for the data to be returned in the native format - all of the 
 
 
 ### Clinical Data
+
 `getAllClinicalDataInStudy(studyId, return_type = 'dict'):` - this returns a list of clinical data for the given study id.
 
 `getAllClinicalDataOfPatientInStudy(studyId, patientId, return_type = 'dict')` - this returns a list of clinical data for the given study id and patient id.
