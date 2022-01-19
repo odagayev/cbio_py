@@ -380,3 +380,24 @@ def getSamplesByKeyword(keyword, return_type = 'dict'):
     elif(return_type == 'native'):
         return samples
 
+def POSTGetPatientClinicalDataForSpecificStudy(studyId, attributeIdsList, patientIdsList, projection = 'SUMMARY', return_type = 'dict'):
+    clinicalDict = {
+        "attributeIds": attributeIdsList,
+        "ids": patientIdsList
+    }
+    clinicalAttributesList = cbioportal.Clinical_Data.fetchAllClinicalDataInStudyUsingPOST(
+        clinicalDataSingleStudyFilter = clinicalDict,
+        projection = projection,
+        clinicalDataType = 'PATIENT',
+        studyId = studyId
+    ).result()
+    if return_type == 'dict':
+        clinicalAttributesList_list = []
+        for clinicalAttributes in clinicalAttributesList:
+            clinicalAttributes_dict = {}
+            for att in dir(clinicalAttributes):
+                clinicalAttributes_dict[att] = getattr(clinicalAttributes, att)
+            clinicalAttributesList_list.append(clinicalAttributes_dict)
+        return clinicalAttributesList_list
+    elif(return_type == 'native'):
+        return clinicalAttributesList
