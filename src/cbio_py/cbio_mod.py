@@ -402,7 +402,7 @@ def POSTGetPatientClinicalDataForSpecificStudy(studyId, attributeIdsList, patien
     elif(return_type == 'native'):
         return clinicalAttributesList
 
-def POSTGetPatientClinicalDataForSpecificStudy(studyId, attributeIdsList, sampleIdsList, projection = 'SUMMARY', return_type = 'dict'):
+def getClinicalAttributesForSeveralPatientsPOST(studyId, attributeIdsList, sampleIdsList, projection = 'SUMMARY', return_type = 'dict'):
     clinicalDict = {
         "attributeIds": attributeIdsList,
         "ids": sampleIdsList
@@ -423,3 +423,41 @@ def POSTGetPatientClinicalDataForSpecificStudy(studyId, attributeIdsList, sample
         return clinicalAttributesList_list
     elif(return_type == 'native'):
         return clinicalAttributesList
+
+def getClinicalAtrributesFromSeveralStudiesPOST(studyidsList, return_type = 'dict'):
+    clinicalAttributesList = cbioportal.Clinical_Attributes.fetchClinicalAttributesUsingPOST(
+        studyIds = studyidsList
+    ).result()
+    if return_type == 'dict':
+        clinicalAttributesList_list = []
+        for clinicalAttributes in clinicalAttributesList:
+            clinicalAttributes_dict = {}
+            for att in dir(clinicalAttributes):
+                clinicalAttributes_dict[att] = getattr(clinicalAttributes, att)
+            clinicalAttributesList_list.append(clinicalAttributes_dict)
+        return clinicalAttributesList_list
+    elif(return_type == 'native'):
+        return clinicalAttributesList
+
+def getSeveralClinicalAttributesFromDifferentStudiesAndPatients(attributesIdList, patientStudyDictList, projection = 'SUMMARY', return_type = 'dict'):
+    clinicalAttributesList = cbioportal.Clinical_Data.fetchClinicalDataUsingPOST(
+        clinicalDataMultiStudyFilter = {
+            "attributeIds": attributesIdList,
+            "identifiers": patientStudyDictList
+        },
+        clinicalDataType = 'PATIENT',
+        projection = projection
+    ).result()
+    if return_type == 'dict':
+        clinicalAttributesList_list = []
+        for clinicalAttributes in clinicalAttributesList:
+            clinicalAttributes_dict = {}
+            for att in dir(clinicalAttributes):
+                clinicalAttributes_dict[att] = getattr(clinicalAttributes, att)
+            clinicalAttributesList_list.append(clinicalAttributes_dict)
+        return clinicalAttributesList_list
+    elif(return_type == 'native'):
+        return clinicalAttributesList
+
+#Get molecular profile ID POST method. 
+
