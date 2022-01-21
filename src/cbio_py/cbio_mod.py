@@ -459,5 +459,53 @@ def getSeveralClinicalAttributesFromDifferentStudiesAndPatients(attributesIdList
     elif(return_type == 'native'):
         return clinicalAttributesList
 
-#Get molecular profile ID POST method. 
+def getMolecularProfilesForSpecificEntrezIDPOST(entrezGeneIds,molecularProfileIdsList,projection='SUMMARY',return_type='dict'):
+    molecularDataMultipleStudyFilter = {
+        "entrezGeneIds":[
+            entrezGeneIds
+        ],
+        "molecularProfileIds": molecularProfileIdsList 
+    }
+    molecularProfileReturns = cbioportal.Molecular_Data.fetchMolecularDataInMultipleMolecularProfilesUsingPOST(molecularDataMultipleStudyFilter = molecularDataMultipleStudyFilter, projection = projection).result()
+    if return_type == 'dict':
+        molecularProfileReturns_list = []
+        for molecularProfileReturn in molecularProfileReturns:
+            molecularProfileReturn_dict = {}
+            for att in dir(molecularProfileReturn):
+                molecularProfileReturn_dict[att] = getattr(molecularProfileReturn, att)
+            molecularProfileReturns_list.append(molecularProfileReturn_dict)
+        return molecularProfileReturns_list
+    elif (return_type == 'native'):
+        return molecularProfileReturns
 
+def getMolecularProfilesForListOfMolecularProfileIds(molecularProfileIdsList,projection='SUMMARY',return_type='dict'):
+    molecularProfileFilter = {
+        'molecularProfileIds': molecularProfileIdsList
+    }
+    molecularProfileReturns = cbioportal.Molecular_Profiles.fetchMolecularProfilesUsingPOST(molecularProfileFilter = molecularProfileFilter, projection = projection).result()
+    if return_type == 'dict':
+        molecularProfileReturns_list = []
+        for molecularProfileReturn in molecularProfileReturns:
+            molecularProfileReturn_dict = {}
+            for att in dir(molecularProfileReturn):
+                molecularProfileReturn_dict[att] = getattr(molecularProfileReturn, att)
+            molecularProfileReturns_list.append(molecularProfileReturn_dict)
+        return molecularProfileReturns_list
+    elif (return_type == 'native'):
+        return molecularProfileReturns
+
+def getMolecularProfilesForListOfStudyIds(studyIdsList,projection='SUMMARY',return_type='dict'):
+    molecularProfileFilter = {
+        'studyIds': studyIdsList
+    }
+    molecularProfileReturns = cbioportal.Molecular_Profiles.fetchMolecularProfilesUsingPOST(molecularProfileFilter = molecularProfileFilter, projection = projection).result()
+    if return_type == 'dict':
+        molecularProfileReturns_list = []
+        for molecularProfileReturn in molecularProfileReturns:
+            molecularProfileReturn_dict = {}
+            for att in dir(molecularProfileReturn):
+                molecularProfileReturn_dict[att] = getattr(molecularProfileReturn, att)
+            molecularProfileReturns_list.append(molecularProfileReturn_dict)
+        return molecularProfileReturns_list
+    elif (return_type == 'native'):
+        return molecularProfileReturns
