@@ -4,6 +4,21 @@ from bravado.client import SwaggerClient as bravado_client
 cbioportal = bravado_client.from_url('https://www.cbioportal.org/api/api-docs', 
     config={"validate_requests":False,"validate_responses":False,"validate_swagger_spec": False,})
 
+def return_to_dict_converter(return_type,return_list):
+    print(return_list)
+    if return_type == 'dict':
+        return_list_dict = []
+        for return_item in return_list:
+            return_item_dict = {}
+            for att in dir(return_item):
+                return_item_dict[att] = getattr(return_item, att)
+            return_list_dict.append(return_item_dict)
+        return return_list_dict
+    elif return_type == 'native':
+        return return_list
+
+
+
 #Fetch all of the studies
 def getAllStudies(return_type = 'dict'): #I assume the end user will prefer a dictionary object
     studies = cbioportal.Studies.getAllStudiesUsingGET().result()
@@ -231,15 +246,18 @@ def getMolecularProfile(molecularProfileId, return_type = 'dict'):
     elif(return_type == 'native'):
         return molecularProfile
 
-def getMolecularProfileInStudy(studyId, molecularProfileId, return_type = 'dict'):
-    molecularProfile = cbioportal.Molecular_Profiles.getMolecularProfileInStudyUsingGET(studyId=studyId,molecularProfileId=molecularProfileId).result()
+def getMolecularProfilesInStudy(studyId,return_type = 'dict'):
+    molecularProfiles = cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=studyId).result()
     if return_type == 'dict':
-        molecularProfile_dict = {}
-        for att in dir(molecularProfile):
-            molecularProfile_dict[att] = getattr(molecularProfile, att)
-        return molecularProfile_dict
+        molecularProfiles_list = []
+        for molecularProfile in molecularProfiles:
+            molecularProfile_dict = {}
+            for att in dir(molecularProfile):
+                molecularProfile_dict[att] = getattr(molecularProfile, att)
+            molecularProfiles_list.append(molecularProfile_dict)
+        return molecularProfiles_list
     elif(return_type == 'native'):
-        return molecularProfile
+        return molecularProfiles
 
 # appending _all and _mutations to study id here 
 def getMutationsInMolecularProfile(molecularProfileId, sampleListId, projection='DETAILED', return_type = 'dict', append='yes'):
@@ -380,7 +398,10 @@ def getSamplesByKeyword(keyword, return_type = 'dict'):
     elif(return_type == 'native'):
         return samples
 
-def POSTGetPatientClinicalDataForSpecificStudy(studyId, attributeIdsList, patientIdsList, projection = 'SUMMARY', return_type = 'dict'):
+
+#### POST FUNCTIONS ####
+
+def GetPatientClinicalDataForSpecificStudyPOST(studyId, attributeIdsList, patientIdsList, projection = 'SUMMARY', return_type = 'dict'):
     clinicalDict = {
         "attributeIds": attributeIdsList,
         "ids": patientIdsList
@@ -509,3 +530,47 @@ def getMolecularProfilesForListOfStudyIds(studyIdsList,projection='SUMMARY',retu
         return molecularProfileReturns_list
     elif (return_type == 'native'):
         return molecularProfileReturns
+
+def fetchMutationsInMolecularProfile(entrezGeneIdsListList,sampleIdsList,molecularProfileId, return_type = 'dict'):
+    mutationFilter = {
+        "entrezGeneIds": entrezGeneIdsListList,
+        "sampleIds": sampleIdsList
+    }
+    mutationList = cbioportal.MolecularProfiles.fetchMolecularProfilesUsingPOST(molecularProfileId=molecularProfileId,mutationFilter=mutationFilter).result()
+    if return_type == 'dict':
+        mutationList_list = []
+        for mutation in mutationList:
+            mutation_dict = {}
+            for att in dir(mutation):
+                mutation_dict[att] = getattr(mutation, att)
+            mutationList_list.append(mutation_dict)
+        return mutationList_list
+    elif (return_type == 'native'):
+        return mutationList
+
+##mutations fetch multiple profiles endpoint next
+def fetchMutationsInMultipleMolecularProfilesPOST(entrezGeneIdsList, molecularProfileIdsList, return_type = 'dict'):
+    mutationMultipleStudyFilter = {
+        "entrezGeneIds": entrezGeneIdsList,
+        "molecularProfileIds": molecularProfileIdsList
+    }
+    mutationList = cbioportal.Mutations.fetchMutationsInMultipleMolecularProfilesUsingPOST(mutationMultipleStudyFilter = mutationMultipleStudyFilter).result()
+    if return_type == 'dict':
+        mutationList_list = []
+        for mutation in mutationList:
+            mutation_dict = {}
+            for att in dir(mutation):
+                mutation_dict[att] = getattr(mutation, att)
+            mutationList_list.append(mutation_dict)
+        return mutationList_list
+    elif (return_type == 'native'):
+        return mutationList
+
+def fetchDiscreteCopyNumberAlterationsPOST(entrezGeneIdsList,sampleIdsList, molecularProfileId,discreteCopyNumberEventType = 'ALL', projection='SUMMARY',return_type = 'dict'):
+    discreteCopyNumberFilter = {
+        "entrezGeneIds": entrezGeneIdsList,
+        "sampleIds": sampleIdsList
+    }
+    discreteCopyNumberAltreations = cbioportal.Discrete_Copy_Number_Alterations.fetchDiscreteCopyNumbersInMolecularProfileUsingPOST(molecularProfileId=molecularProfileId,discreteCopyNumberFilter=discreteCopyNumberFilter,discreteCopyNumberEventType=discreteCopyNumberEventType,projection=projection).result()
+    return return_to_dict_converter(return_type,discreteCopyNumberAltreations)
+
