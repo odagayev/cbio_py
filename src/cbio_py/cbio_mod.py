@@ -5,7 +5,6 @@ cbioportal = bravado_client.from_url('https://www.cbioportal.org/api/api-docs',
     config={"validate_requests":False,"validate_responses":False,"validate_swagger_spec": False,})
 
 def return_to_dict_converter(return_type,return_list):
-    print(return_list)
     if return_type == 'dict':
         return_list_dict = []
         for return_item in return_list:
@@ -574,3 +573,23 @@ def fetchDiscreteCopyNumberAlterationsPOST(entrezGeneIdsList,sampleIdsList, mole
     discreteCopyNumberAltreations = cbioportal.Discrete_Copy_Number_Alterations.fetchDiscreteCopyNumbersInMolecularProfileUsingPOST(molecularProfileId=molecularProfileId,discreteCopyNumberFilter=discreteCopyNumberFilter,discreteCopyNumberEventType=discreteCopyNumberEventType,projection=projection).result()
     return return_to_dict_converter(return_type,discreteCopyNumberAltreations)
 
+def fetchMultipleGenesPOST(entrezGeneIdsList,return_type = 'dict'):
+    geneList = cbioportal.Genes.fetchGenesUsingPOST(geneIds=entrezGeneIdsList).result()
+    return return_to_dict_converter(return_type,geneList)
+
+def fetchGenePanelsFromMultipleMolecularProfileIdsPOST(molecularProfileIdsList,return_type = 'dict'):
+    genePanelFilter = {
+        'molecularProfileIds': molecularProfileIdsList
+    }
+    genePanelList = cbioportal.Gene_Panels.fetchGenePanelDataInMultipleMolecularProfilesUsingPOST(genePanelDataMultipleStudyFilter = genePanelFilter).result()
+    return return_to_dict_converter(return_type, genePanelList)
+
+def fetchListOfGenePanelsPOST(genePanelIdList, return_type='dict'):
+    genePanels = cbioportal.Gene_Panels.fetchGenePanelsUsingPOST(genePanelIds=genePanelIdList).result()
+    return return_to_dict_converter(return_type, genePanels)
+
+#generic assays
+
+#treatements
+
+#structural variants
