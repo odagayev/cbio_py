@@ -5,149 +5,107 @@ cbioportal = bravado_client.from_url('https://www.cbioportal.org/api/api-docs',
     config={"validate_requests":False,"validate_responses":False,"validate_swagger_spec": False,})
 
 def return_to_dict_converter(return_type,return_list):
-    if return_type == 'dict':
-        return_list_dict = []
-        for return_item in return_list:
-            return_item_dict = {}
-            for att in dir(return_item):
-                return_item_dict[att] = getattr(return_item, att)
-            return_list_dict.append(return_item_dict)
-        return return_list_dict
-    elif return_type == 'native':
-        return return_list
+    if type(return_list) == list:
+        if return_type == 'dict':
+            return_list_dict = []
+            for return_item in return_list:
+                return_item_dict = {}
+                for att in dir(return_item):
+                    return_item_dict[att] = getattr(return_item, att)
+                return_list_dict.append(return_item_dict)
+            return return_list_dict
+        elif return_type == 'native':
+            return return_list
+    else:
+        if return_type == 'dict':
+            return_dict = {}
+            for att in dir(return_list):
+                return_dict[att] = getattr(return_list, att)
+            return return_dict
+        elif return_type == 'native':
+            return return_list
 
 #Fetch all of the studies
 def getAllStudies(return_type = 'dict'): #I assume the end user will prefer a dictionary object
     studies = cbioportal.Studies.getAllStudiesUsingGET().result()
-    return_to_dict_converter(return_type,studies)
+    return return_to_dict_converter(return_type,studies)
 
 def getSpecificStudy(studyId, return_type = 'dict'):
     study = cbioportal.Studies.getStudyUsingGET(studyId=studyId).result()
-    return_to_dict_converter(return_type, study)
+    return return_to_dict_converter(return_type, study)
 
-## verify that this works
+## verify that this works - couldn't get a non empty list return
 def getStudyTags(studyId,return_type = 'dict'):
     studyTags = cbioportal.Studies.getTagsUsingGET(studyId=studyId).result()
-    return_to_dict_converter(return_type,studyTags)
+    return return_to_dict_converter(return_type,studyTags)
 
 def getAllCancerTypes(return_type = 'dict'):
     cancerTypes = cbioportal.Cancer_Types.getAllCancerTypesUsingGET().result()
-    return_to_dict_converter(return_type,cancerTypes)
+    return return_to_dict_converter(return_type,cancerTypes)
 
 def getCancerByID(cancerTypeId, return_type = 'dict'):
     cancerType = cbioportal.Cancer_Types.getCancerTypeUsingGET(cancerTypeId=cancerTypeId).result()
-    return_to_dict_converter(return_type,cancerType)
+    return return_to_dict_converter(return_type,cancerType)
 
 def getAllClinicalAttributes(return_type = 'dict'):
     clinicalAttributes = cbioportal.Clinical_Attributes.getAllClinicalAttributesUsingGET().result()
-    return_to_dict_converter(return_type, clinicalAttributes)
+    return return_to_dict_converter(return_type, clinicalAttributes)
 
 def getClinicalAttributesByStudyId(studyId, return_type = 'dict'):
     clinicalAttributes = cbioportal.Clinical_Attributes.getAllClinicalAttributesInStudyUsingGET(studyId=studyId).result()
-    return_to_dict_converter(return_type,clinicalAttributes)
+    return return_to_dict_converter(return_type,clinicalAttributes)
 
 def getClinicalAttributeInStudy(studyId, clinicalAttributeId, return_type = 'dict'):
     clinicalAttributes = cbioportal.Clinical_Attributes.getClinicalAttributeInStudyUsingGET(clinicalAttributeId=clinicalAttributeId,studyId=studyId).result()
-    return_to_dict_converter(return_type, clinicalAttributes)
+    return return_to_dict_converter(return_type, clinicalAttributes)
 
 def getAllClinicalDataInStudy(studyId, return_type = 'dict'):
     clinicalData = cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=studyId).result()
-    return_to_dict_converter(return_type,clinicalData)
+    return return_to_dict_converter(return_type,clinicalData)
 
 def getAllClinicalDataOfPatientInStudy(studyId, patientId, return_type = 'dict'):
     clinicalData = cbioportal.Clinical_Data.getAllClinicalDataOfPatientInStudyUsingGET(studyId=studyId,patientId=patientId).result()
-    return_to_dict_converter(return_type,clinicalData)
+    return return_to_dict_converter(return_type,clinicalData)
 
 def getAllClinicalDataOfSampleInStudy(studyId, sampleId, return_type = 'dict'):
     clinicalData = cbioportal.Clinical_Data.getAllClinicalDataOfSampleInStudyUsingGET(studyId=studyId,sampleId=sampleId).result()
-    return_to_dict_converter(return_type,clinicalData)
+    return return_to_dict_converter(return_type,clinicalData)
 
 def getCopyNumberSegmentsInSampleInStudy(studyId, sampleId, return_type = 'dict'):
-    copyNumberSegments = cbioportal.Copy_Number_Segments.getCopyNumberSegmentsInSampleInStudyUsingGET(studyId=studyId,sampleId=sampleId).result()
-    return_to_dict_converter(return_type,copyNumberSegments)
+    copyNumberSegments = cbioportal.Copy_Number_Segments.getCopyNumberSegmentsInSampleInStudyUsingGET(studyId=studyId,sampleId=sampleId,).result()
+    return return_to_dict_converter(return_type,copyNumberSegments)
 
 def getAllGenePanels(return_type = 'dict'):
     genePanels = cbioportal.Gene_Panels.getAllGenePanelsUsingGET().result()
-    return_to_dict_converter(return_type,genePanels)
+    return return_to_dict_converter(return_type,genePanels)
 
 def getSpecificGenePanel(genePanelId, return_type = 'dict'):
     genePanel = cbioportal.Gene_Panels.getGenePanelUsingGET(genePanelId=genePanelId).result()
-    if return_type == 'dict':
-        genePanel_dict = {}
-        for att in dir(genePanel):
-            genePanel_dict[att] = getattr(genePanel, att)
-        return genePanel_dict
-    elif(return_type == 'native'):
-        return genePanel
+    return return_to_dict_converter(return_type, genePanel)
 
 def getAllGenes(return_type = 'dict'):
     genes = cbioportal.Genes.getAllGenesUsingGET().result()
-    if return_type == 'dict':
-        genes_list = []
-        for gene in genes:
-            gene_dict = {}
-            for att in dir(gene):
-                gene_dict[att] = getattr(gene, att)
-            genes_list.append(gene_dict)
-        return genes_list
-    elif(return_type == 'native'):
-        return genes
+    return return_to_dict_converter(return_type, genes)
 
 def getAliasForGene(geneId, return_type = 'dict'):
     alias = cbioportal.Genes.getAliasForGeneUsingGET(geneId=geneId).result()
-    if return_type == 'dict':
-        alias_dict = {}
-        for att in dir(alias):
-            alias_dict[att] = getattr(alias, att)
-        return alias_dict
-    elif(return_type == 'native'):
-        return alias
+    return return_to_dict_converter(return_type, alias)
 
 def getGene(geneId, return_type = 'dict'):
     gene = cbioportal.Genes.getGeneUsingGET(geneId=geneId).result()
-    if return_type == 'dict':
-        gene_dict = {}
-        for att in dir(gene):
-            gene_dict[att] = getattr(gene, att)
-        return gene_dict
-    elif(return_type == 'native'):
-        return gene
+    return return_to_dict_converter(return_type, gene)
 
 def getAllMolecularProfiles(return_type = 'dict'):
     molecularProfiles = cbioportal.Molecular_Profiles.getAllMolecularProfilesUsingGET().result()
-    if return_type == 'dict':
-        molecularProfiles_list = []
-        for molecularProfile in molecularProfiles:
-            molecularProfile_dict = {}
-            for att in dir(molecularProfile):
-                molecularProfile_dict[att] = getattr(molecularProfile, att)
-            molecularProfiles_list.append(molecularProfile_dict)
-        return molecularProfiles_list
-    elif(return_type == 'native'):
-        return molecularProfiles
+    return return_to_dict_converter(return_type,molecularProfiles)
 
 def getMolecularProfile(molecularProfileId, return_type = 'dict'):
     molecularProfile = cbioportal.Molecular_Profiles.getMolecularProfileUsingGET(molecularProfileId=molecularProfileId).result()
-    if return_type == 'dict':
-        molecularProfile_dict = {}
-        for att in dir(molecularProfile):
-            molecularProfile_dict[att] = getattr(molecularProfile, att)
-        return molecularProfile_dict
-    elif(return_type == 'native'):
-        return molecularProfile
+    return return_to_dict_converter(return_type,molecularProfile)
 
 def getMolecularProfilesInStudy(studyId,return_type = 'dict'):
     molecularProfiles = cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=studyId).result()
-    if return_type == 'dict':
-        molecularProfiles_list = []
-        for molecularProfile in molecularProfiles:
-            molecularProfile_dict = {}
-            for att in dir(molecularProfile):
-                molecularProfile_dict[att] = getattr(molecularProfile, att)
-            molecularProfiles_list.append(molecularProfile_dict)
-        return molecularProfiles_list
-    elif(return_type == 'native'):
-        return molecularProfiles
+    return return_to_dict_converter(return_type,molecularProfiles)
 
 # appending _all and _mutations to study id here 
 def getMutationsInMolecularProfile(molecularProfileId, sampleListId, projection='DETAILED', return_type = 'dict', append='yes'):
@@ -159,16 +117,7 @@ def getMutationsInMolecularProfile(molecularProfileId, sampleListId, projection=
         sampleListId = sampleListId 
     mutations = cbioportal.Mutations.getMutationsInMolecularProfileBySampleListIdUsingGET(
         molecularProfileId=molecularProfileId,sampleListId = sampleListId, projection=projection).result()
-    if return_type == 'dict':
-        mutations_list = []
-        for mutation in mutations:
-            mutation_dict = {}
-            for att in dir(mutation):
-                mutation_dict[att] = getattr(mutation, att)
-            mutations_list.append(mutation_dict)
-        return mutations_list
-    elif(return_type == 'native'):
-        return mutations
+    return return_to_dict_converter(return_type,mutations)
 
 def getAllPatients(return_type = 'dict'):
     patients = cbioportal.Patients.getAllPatientsUsingGET().result()
