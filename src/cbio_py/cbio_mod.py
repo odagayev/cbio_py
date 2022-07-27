@@ -1,7 +1,7 @@
 from bravado.client import SwaggerClient as bravado_client
 
 # This is the initialization of many of the data sources that we will need
-cbioportal = bravado_client.from_url('https://www.cbioportal.org/api/api-docs', 
+cbioportal = bravado_client.from_url('https://www.cbioportal.org/api/v2/api-docs', 
     config={"validate_requests":False,"validate_responses":False,"validate_swagger_spec": False,})
 
 def return_to_dict_converter(return_type,return_list):
