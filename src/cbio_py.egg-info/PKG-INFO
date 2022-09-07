@@ -1,12 +1,10 @@
 Metadata-Version: 2.1
 Name: cbio-py
-Version: 0.1.2
+Version: 0.1.3
 Summary: This is a python client for the cBioPortal API
 Home-page: https://github.com/odagayev/cancer_module_cbio
 Author: Sasha Dagayev
-License: UNKNOWN
 Project-URL: Bug Tracker, https://github.com/odagayev/cancer_module_cbio/issues
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
@@ -126,6 +124,4 @@ If you would like for the data to be returned in the native format - all of the 
 The `Treatement` api endpoint is not configured. I will hopefully be able to update the api to include this functionality in the future.
 
 POST endpoints are not included in the api. All of the requests are GET requests.
-
-
 
