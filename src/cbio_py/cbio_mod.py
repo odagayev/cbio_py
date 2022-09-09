@@ -430,6 +430,24 @@ def fetchListOfGenePanelsPOST(genePanelIdList, return_type='dict'):
 
 #generic assays
 
+def getGenericAssayMetaListGET(molecularProfileId, return_type = 'dict'):
+    genericAssayMetaList = cbioportal.Generic_Assays.getGenericAssayMetaUsingGET(molecularProfileId=molecularProfileId).result()
+    return return_to_dict_converter(return_type,genericAssayMetaList)
+
+def getGenericAssayUsingGenericAssaayStableID(stableId, return_type = 'dict'):
+    genericAssay = cbioportal.Generic_Assays.getGenericAssayMeta_gaUsingGET(genericAssayStableId=stableId).result()
+    return return_to_dict_converter(return_type,genericAssay)
+
+def fetchMultipleGenericAssayUsingPost(molecularProfileIdsLIST, genericAssayStableIdsLIST, return_type = 'dict'):
+    genericAssayMetaFilter = {
+        'molecularProfileIds': molecularProfileIdsLIST,
+        'genericAssayStableIds': genericAssayStableIdsLIST
+    }
+    genericAssayList = cbioportal.Generic_Assays.fetchGenericAssayMetaUsingPOST(genericAssayMetaFilter = genericAssayMetaFilter).result()
+    return return_to_dict_converter(return_type,genericAssayList)
+
 #treatements
+
+
 
 #structural variants
